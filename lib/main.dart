@@ -1,32 +1,57 @@
 import 'package:bgmi_flutter/presentations/frame_page.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  ThemeMode themeMode = ThemeMode.system;
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    const FlexScheme usedScheme = FlexScheme.mandyRed;
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
+      title: 'BGMI FLUTTER',
+      // Use a predefined FlexThemeData.light() theme for the light theme.
+      theme: FlexThemeData.light(
+        scheme: FlexScheme.flutterDash,
+        surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
+        blendLevel: 20,
+        appBarOpacity: 0.95,
+        subThemesData: const FlexSubThemesData(
+          blendOnLevel: 20,
+          blendOnColors: false,
+        ),
+        visualDensity: FlexColorScheme.comfortablePlatformDensity,
         useMaterial3: true,
-        primarySwatch: Colors.blue,
+        // To use the playground font, add GoogleFonts package and uncomment
+        // fontFamily: GoogleFonts.notoSans().fontFamily,
       ),
-      home: FramePage(),
+      darkTheme: FlexThemeData.dark(
+        scheme: FlexScheme.flutterDash,
+        surfaceMode: FlexSurfaceMode.highScaffoldLevelSurface,
+        blendLevel: 15,
+        appBarOpacity: 0.90,
+        subThemesData: const FlexSubThemesData(
+          blendOnLevel: 30,
+        ),
+        visualDensity: FlexColorScheme.comfortablePlatformDensity,
+        useMaterial3: true,
+        // To use the playground font, add GoogleFonts package and uncomment
+        // fontFamily: GoogleFonts.notoSans().fontFamily,
+      ),
+      // If you do not have a themeMode switch, uncomment this line
+      // to let the device system mode control the theme mode:
+      // themeMode: ThemeMode.system,
+      // Use the above dark or light theme based on active themeMode.
+      themeMode: themeMode,
+      home: const FramePage(),
     );
   }
 }

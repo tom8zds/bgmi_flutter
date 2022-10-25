@@ -43,6 +43,9 @@ class IndexPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: CustomScrollView(
                 slivers: [
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: 16),
+                  ),
                   SliverGrid(
                     delegate: SliverChildBuilderDelegate((context, index) {
                       final item = subscribeItems.elementAt(index);
@@ -62,39 +65,38 @@ class IndexPage extends StatelessWidget {
                             Align(
                               alignment: Alignment.topRight,
                               child: Padding(
-                                padding: const EdgeInsets.all(6.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Chip(
                                   label: Text(
                                     "${item.episode}",
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onSecondary,
+                                          .onPrimary,
                                     ),
                                   ),
                                   backgroundColor:
-                                      Theme.of(context).colorScheme.secondary,
+                                      Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                             ),
                             Align(
                               alignment: Alignment.bottomCenter,
                               child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Chip(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ActionChip(
                                   label: Text(
                                     item.bangumiName,
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onSurfaceVariant,
+                                          .onSurface,
                                     ),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  backgroundColor: Theme.of(context)
-                                      .colorScheme
-                                      .surfaceVariant,
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.surface,
                                 ),
                               ),
                             ),
