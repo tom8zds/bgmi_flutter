@@ -38,7 +38,7 @@ class IndexPage extends StatelessWidget {
             );
           }
           if (state is SubscribeIndexFinish) {
-            final subscribeItems = state.data.data;
+            final subscribeItems = state.data;
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: CustomScrollView(

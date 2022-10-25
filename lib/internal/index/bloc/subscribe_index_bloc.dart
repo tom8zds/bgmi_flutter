@@ -1,3 +1,4 @@
+import 'package:bgmi_flutter/internal/common/api_response.dart';
 import 'package:bgmi_flutter/internal/index/subscribe_index.dart';
 import 'package:bgmi_flutter/internal/index/subscribe_index_getter.dart';
 import 'package:bloc/bloc.dart';
@@ -17,7 +18,7 @@ class SubscribeIndexBloc
       if (event is GetSubscribeIndexEvent) {
         emit(SubscribeIndexLoading());
         try {
-          SubscribeIndex data = await _getSubscribeIndex();
+          List<SubscribeItem> data = await _getSubscribeIndex();
           emit(SubscribeIndexFinish(data));
         } catch (e, stacktrace) {
           print(e);

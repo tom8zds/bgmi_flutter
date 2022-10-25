@@ -8,7 +8,7 @@ class SubscribeIndexInitial extends SubscribeIndexState {}
 class SubscribeIndexLoading extends SubscribeIndexState {}
 
 class SubscribeIndexFinish extends SubscribeIndexState {
-  final SubscribeIndex data;
+  final List<SubscribeItem> data;
 
   SubscribeIndexFinish(this.data);
 }

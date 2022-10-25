@@ -3,51 +3,12 @@
 //     final subscribeIndex = subscribeIndexFromJson(jsonString);
 import 'dart:convert';
 
-SubscribeIndex subscribeIndexFromJson(String str) =>
-    SubscribeIndex.fromJson(json.decode(str));
+List<SubscribeItem> subscribeItemFromJson(String str) =>
+    List<SubscribeItem>.from(
+        json.decode(str).map((x) => SubscribeItem.fromJson(x)));
 
-String subscribeIndexToJson(SubscribeIndex data) => json.encode(data.toJson());
-
-class SubscribeIndex {
-  SubscribeIndex({
-    required this.version,
-    required this.latestVersion,
-    required this.frontendVersion,
-    required this.status,
-    required this.lang,
-    required this.danmakuApi,
-    required this.data,
-  });
-
-  final String version;
-  final String latestVersion;
-  final String frontendVersion;
-  final String status;
-  final String lang;
-  final String danmakuApi;
-  final List<SubscribeItem> data;
-
-  factory SubscribeIndex.fromJson(Map<String, dynamic> json) => SubscribeIndex(
-        version: json["version"],
-        latestVersion: json["latest_version"],
-        frontendVersion: json["frontend_version"],
-        status: json["status"],
-        lang: json["lang"],
-        danmakuApi: json["danmaku_api"],
-        data: List<SubscribeItem>.from(
-            json["data"].map((x) => SubscribeItem.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "version": version,
-        "latest_version": latestVersion,
-        "frontend_version": frontendVersion,
-        "status": status,
-        "lang": lang,
-        "danmaku_api": danmakuApi,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-      };
-}
+String subscribeItemToJson(List<SubscribeItem> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class SubscribeItem {
   SubscribeItem({
