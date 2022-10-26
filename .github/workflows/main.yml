@@ -6,7 +6,8 @@ name: build_all
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "master" ]
+    tags: 
+      - '*'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -14,7 +15,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build_linux:
+  test:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -33,20 +34,34 @@ jobs:
         
       - name: Run unit tests
         run: flutter test --coverage  
+        
+  build_android:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
       
       - name: Build APK
-        run: flutter build apk
+        run: flutter build apk --release
         
-      - name: get dependencies  
-        run: |
-             sudo apt-get update -y
-             sudo apt-get install -y ninja-build libgtk-3-dev
-             
-      - name: Build linux desktop       
-        run: flutter build linux
-      
-      - name: Build Web
-        run: flutter build web
+      - name: Android release 
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+           files: build/app/outputs/flutter-apk/app-release.apk
   
   build_windows:
    runs-on: windows-latest
@@ -60,4 +75,12 @@ jobs:
          channel: 'stable'
          
      - name: Build Windows desktop
-       run: flutter build windows
+       run: flutter build windows --release
+       
+     - name: Windows Release
+       uses: softprops/action-gh-release@v1
+       if: startsWith(github.ref, 'refs/tags/')
+       env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       with:
+          files: build/windows/runner/Release/bgmi_flutter.exe
