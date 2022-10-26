@@ -74,7 +74,14 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
       _navType = NavType.rail;
       return;
     }
-    _navType = NavType.bottom;
+    if (_navType == NavType.panel) {
+      _navType = NavType.rail;
+    }
+    Future.delayed(Duration(milliseconds: 300), () {
+      setState(() {
+        _navType = NavType.bottom;
+      });
+    });
   }
 
   Widget buildSideNavigator() {

@@ -39,14 +39,14 @@ class IndexPage extends StatelessWidget {
           }
           if (state is SubscribeIndexFinish) {
             final subscribeItems = state.data;
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: CustomScrollView(
-                slivers: [
-                  const SliverToBoxAdapter(
-                    child: SizedBox(height: 16),
-                  ),
-                  SliverGrid(
+            return CustomScrollView(
+              slivers: [
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: 16),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  sliver: SliverGrid(
                     delegate: SliverChildBuilderDelegate((context, index) {
                       final item = subscribeItems.elementAt(index);
                       return Container(
@@ -111,8 +111,8 @@ class IndexPage extends StatelessWidget {
                       crossAxisSpacing: 8,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             );
           }
           throw UnimplementedError();
