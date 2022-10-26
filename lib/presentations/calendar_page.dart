@@ -49,10 +49,13 @@ class CalendarPage extends StatelessWidget {
                   i % 2 == 1
                       ? SliverPadding(
                           padding: EdgeInsets.symmetric(horizontal: 16),
-                          sliver: AnimeGrid(
+                          sliver: SliverToBoxAdapter(
+                            child: AnimeWrap(
                               data: calendarData.entries
                                   .elementAt((i / 2).floor())
-                                  .value),
+                                  .value,
+                            ),
+                          ),
                         )
                       : SliverToBoxAdapter(
                           child: ListTile(
@@ -77,77 +80,90 @@ class CalendarPage extends StatelessWidget {
   }
 }
 
-class AnimeGrid extends StatelessWidget {
-  const AnimeGrid({
-    Key? key,
-    required this.data,
-  }) : super(key: key);
-
+class AnimeWrap extends StatelessWidget {
   final List<AnimeData> data;
+
+  const AnimeWrap({super.key, required this.data});
+
+  int calGap(double width) {
+    if (width > 960) {
+      return 304;
+    }
+    if (width > 640) {
+      return 72;
+    }
+    return 0;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SliverGrid(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final AnimeData item = data[index];
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: NetworkImage(
-                  item.cover.replaceFirst("/", "://"),
-                ),
-              ),
-            ),
-            child: Stack(
-              children: [
-                item.status == -1
-                    ? const SizedBox()
-                    : Align(
-                        alignment: Alignment.topRight,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Chip(
-                            label: Text(
-                              "${item.episode}",
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                            ),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ActionChip(
-                      label: Text(
-                        item.name,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      backgroundColor: Theme.of(context).colorScheme.surface,
-                    ),
+    double width = MediaQuery.of(context).size.width;
+    int gap = calGap(width);
+    int num = ((width - gap - 32) / (144 + 8)).floor();
+    double padding = (width - gap - 32 - 8 * (num - 1) - 144 * num) / 2;
+    print("num: $num , padding: $padding, gap: $gap");
+    return Container(
+      padding: EdgeInsets.only(left: padding > 0 ? padding : 0),
+      width: 144 * num + 8 * (num - 1),
+      child: Wrap(
+        runSpacing: 8,
+        spacing: 8,
+        children: [
+          for (var item in data)
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: NetworkImage(
+                    item.cover.replaceFirst("/", "://"),
                   ),
                 ),
-              ],
-            ),
-          );
-        },
-        childCount: data.length,
-      ),
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 144,
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 8,
+              ),
+              height: 144,
+              width: 144,
+              child: Stack(
+                children: [
+                  item.status == -1
+                      ? const SizedBox()
+                      : Align(
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Chip(
+                              label: Text(
+                                "${item.episode}",
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
+                              ),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ActionChip(
+                        label: Text(
+                          item.name,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        backgroundColor: Theme.of(context).colorScheme.surface,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+        ],
       ),
     );
   }
