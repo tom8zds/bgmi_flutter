@@ -90,4 +90,4 @@ jobs:
        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        with:
-          files: build/windows/runner/Release/bgmi_flutter.exe
+          files: build/windows/runner/Release/bgmi_flutter-${{github.ref_name}}-windows.zip
